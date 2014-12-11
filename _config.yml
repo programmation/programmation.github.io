@@ -6,7 +6,7 @@
 name: Programmation Pty Limited
 
 # Short bio or description (displayed in the header)
-description: Mobile Developer - Sydney, Australia
+description: Mobile Development - Sydney, Australia
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 # avatar: https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/jekyll-logo.png
@@ -18,10 +18,10 @@ description: Mobile Developer - Sydney, Australia
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble: 
-  email: 
+  email: info@programmation.com.au
   facebook: 
   flickr: 
-  github: 
+  github: http://www.github.com/programmation
   instagram: 
   linkedin: 
   pinterest: 
