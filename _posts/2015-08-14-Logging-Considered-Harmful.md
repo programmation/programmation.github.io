@@ -23,7 +23,7 @@ Race conditions are embarrassingly easy to create. Here's some C# code that has 
 		.Range (0, workerCount)
 		.Select ((x) => {
 			return Task.Run (() => {
-				result += x % 2 == 0 -x : x;
+				result += x % 2 == 0 ? -x : x;
 			});
 		})
 		.ToList ();
@@ -60,7 +60,7 @@ However unlikely it may seem, it's actually true. I *can* fix the race condition
 		.Select ((x) => {
 			return Task.Run (() => {
 				Console.WriteLine("worker {0}", x);  // blink and you'll miss it!
-				result += x % 2 == 0 ? -i : i;
+				result += x % 2 == 0 ? -x : x;
 			});
 		})
 		.ToList ();
