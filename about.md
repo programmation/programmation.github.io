@@ -53,7 +53,6 @@ Memorable highlights include
 * A trip from Esher (SW London) to Cambridge (home) in the snow, with cars and bikes abandoned by the side of the road, but that BMW got me home safely and in relative comfort thanks to some heated handlebar grips.
 * Riding to and around the south of France. Exploring the Pyrénées. Visiting friends near Perpignan. The trip down the valley and up the other side at Millau (there's a spectacular bridge over the whole valley now, but back then it was either use the hairpin bends or jump). Breaking down near Clermont-Ferrand, when the BMW dealer there swapped a brand-new fuel pump out of the showroom model to put in my bike so I could make my hovercraft crossing from Calais, over 750km away. Making the trip Clermont-Ferrand to Calais in one go with only a couple of fuel stops, arriving past 1am on the morning of my hovercraft crossing.
 * Doing 30000 miles in one year while living in Cambridge and working near Manchester, commuting back and forth every week. The trip home across the Peak District on Friday was worth the hassle of being on the road at 0600h each Monday.
-* 
 
 I learned early on that ABS and the right safety gear are two things that make motorcycling much more enjoyable and much safer. I would also recommend anyone thinking of getting on a motorbike for the first time to get some experience and expertise driving a car first. Learning how roads work in a car is much safer - your first mistake on a motorbike can easily also be your last.
 
