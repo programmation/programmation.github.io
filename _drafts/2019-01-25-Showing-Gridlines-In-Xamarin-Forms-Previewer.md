@@ -9,7 +9,7 @@ One of the things about the Previewer that has always frustrated me is that it d
 
 The standard tactic to get around this limitation is to apply a `BackgroundColor` to each object being added. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a `Fuchsia` (hot pink) background at least once) and extremely tedious.
 
-I began to be convinced that "there must be a better way".
+After thinking about it for a while, I began to be convinced that "there must be a better way".
 
 Initially a custom renderer looked like a good idea. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but it has no renderer of its own - all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
 
