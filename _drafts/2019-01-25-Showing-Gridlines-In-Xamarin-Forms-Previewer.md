@@ -7,16 +7,52 @@ I do a lot of work with Xamarin Forms. I'm in the XAML Previewer for much of my 
 
 One of the things about the Previewer that has always frustrated me is that it doesn't show the outlines of any of the objects that I place in a form.
 
-The standard tactic to get around this limitation is to apply a `BackgroundColor` to each object being added. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a `Fuchsia` (hot pink) background at least once) and extremely tedious.
+One way to visualise the grid is to apply a `BackgroundColor` to each object being added. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a `Fuchsia` (hot pink) background at least once) and extremely tedious.
 
-After thinking about it for a while, I began to be convinced that "there must be a better way".
+The search for a solution led initially to a custom renderer. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but it has no renderer of its own - all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
 
-Initially a custom renderer looked like a good idea. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but it has no renderer of its own - all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
-
-The next step was to subclass the `Grid` to `PreviewGrid` and create the custom `PreviewGridRenderer`:
+To create the custom renderer, subclass the `Grid` to make a `PreviewGrid`:
 
 ```
-PreviewGrid
+using Xamarin.Forms;
+
+namespace PreviewGrid.Views
+{
+    public class PreviewGrid : Grid
+    {
+        public static readonly BindableProperty ShowGridLinesProperty =
+            BindableProperty.Create(
+                nameof(ShowGridLines),
+                typeof(bool),
+                typeof(PreviewGrid),
+                false
+            );
+
+        public static readonly BindableProperty GridLinesColorProperty =
+            BindableProperty.Create(
+                nameof(GridLinesColor),
+                typeof(Color),
+                typeof(PreviewGrid),
+                Color.Default
+            );
+
+        public bool ShowGridLines
+        {
+            get => (bool)GetValue(ShowGridLinesProperty);
+            set => SetValue(ShowGridLinesProperty, value);
+        }
+
+        public Color GridLinesColor
+        {
+            get => (Color)GetValue(GridLinesColorProperty);
+            set => SetValue(GridLinesColorProperty, value);
+        }
+
+        public PreviewGrid()
+        {
+        }
+    }
+}
 ```
 
 ```
