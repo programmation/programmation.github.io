@@ -11,12 +11,12 @@ One way to visualise the grid is to apply a `BackgroundColor` to each object bei
 
 The search for a solution led initially to a custom renderer. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but it has no renderer of its own - all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
 
-To create the custom renderer, subclass the `Grid` to make a `PreviewGrid`:
+To create the custom renderer, subclass `Grid` in your platform-independent code to make a `PreviewGrid`:
 
 ```
 using Xamarin.Forms;
 
-namespace PreviewGrid.Views
+namespace PreviewGridLines.Views
 {
     public class PreviewGrid : Grid
     {
@@ -54,6 +54,8 @@ namespace PreviewGrid.Views
     }
 }
 ```
+
+In your platform-specific projects you'll need a subclass of `ViewRenderer`. Here's one for iOS:
 
 ```
 PreviewGridRenderer
