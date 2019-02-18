@@ -20,9 +20,9 @@ namespace PreviewGridLines.Views
 {
     public class PreviewGrid : Grid
     {
-        public static readonly BindableProperty ShowGridLinesProperty =
+        public static readonly BindableProperty IsShowingGridLinesProperty =
             BindableProperty.Create(
-                nameof(ShowGridLines),
+                nameof(IsShowingGridLines),
                 typeof(bool),
                 typeof(PreviewGrid),
                 false
@@ -36,20 +36,16 @@ namespace PreviewGridLines.Views
                 Color.Default
             );
 
-        public bool ShowGridLines
+        public bool IsShowingGridLines
         {
-            get => (bool)GetValue(ShowGridLinesProperty);
-            set => SetValue(ShowGridLinesProperty, value);
+            get => (bool)GetValue(IsShowingGridLinesProperty);
+            set => SetValue(IsShowingGridLinesProperty, value);
         }
 
         public Color GridLinesColor
         {
             get => (Color)GetValue(GridLinesColorProperty);
             set => SetValue(GridLinesColorProperty, value);
-        }
-
-        public PreviewGrid()
-        {
         }
     }
 }
