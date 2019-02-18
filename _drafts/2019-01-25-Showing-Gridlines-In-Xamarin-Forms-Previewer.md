@@ -3,15 +3,15 @@ published: false
 ---
 ## Showing Gridlines In Xamarin Forms Previewer
 
-I do a lot of work with Xamarin Forms. I'm in the XAML Previewer for much of my working day as I create new features and fix bugs in our company's app.
+This blog post describes how to show make a Xamarin.Forms `Grid` show its columns and rows graphically in the Visual Studio XAML Preview.
 
 One of the things about the Previewer that has always frustrated me is that it doesn't show the outlines of any of the objects that I place in a form.
 
-One way to visualise the grid is to apply a `BackgroundColor` to each object being added. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a `Fuchsia` (hot pink) background at least once) and extremely tedious.
+A simple way to visualise the grid is to create some `BoxView` objects, give them `BackgroundColor`, and add them to the `Grid`. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a hot pink background at least once) and extremely tedious.
 
-The search for a solution led initially to a custom renderer. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but it has no renderer of its own - all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
+Xamarin.Forms objects are cross-platform virtualisations that draw on each platform by means of a Renderer. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but unusually it has no renderer of its own. This is because all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
 
-To create the custom renderer, subclass `Grid` in your platform-independent code to make a `PreviewGrid`:
+Most Xamarin.Forms objects are open for subclassing. The `Grid` object definitely is, so we can subclass it in our platform-independent code to make a `PreviewGrid`:
 
 ```
 using Xamarin.Forms;
