@@ -339,6 +339,8 @@ Here is an example of what this looks like in practice:
 </ContentPage>
 ```
 
+Here is the resulting Previewer image:
+
 ![Screen Shot 2019-02-19 at 14.29.41.png]({{site.baseurl}}/_drafts/Screen Shot 2019-02-19 at 14.29.41.png)
 
 Now we have a `PreviewGrid` that can show its `Padding` and grid lines on demand. It works the same way as the built-in `Grid`, and shows its grid only when it detects that it is running in the Previewer.
