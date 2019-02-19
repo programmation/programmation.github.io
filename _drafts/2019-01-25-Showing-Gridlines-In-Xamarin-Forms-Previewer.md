@@ -259,4 +259,80 @@ namespace PreviewGridLines.iOS.Renderers
 }
 ```
 
+Here is an example of what this looks like in practice:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:local="clr-namespace:PreviewGridLines" 
+    xmlns:views="clr-namespace:PreviewGridLines.Views" 
+    x:Class="PreviewGridLines.MainPage">
+    <views:PreviewGrid 
+        BackgroundColor="Transparent"
+        Margin="12"
+        Padding="24"
+        ColumnSpacing="12"
+        RowSpacing="24"
+        VerticalOptions="StartAndExpand" 
+        IsShowingGridLines="true"
+        GridLinesColor="Teal"
+        >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label 
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Margin="12"
+            Text="0,0" 
+            TextColor="Silver"
+            FontAttributes="Italic,Bold"
+            BackgroundColor="Red"
+            VerticalOptions="Start"
+            HorizontalTextAlignment="Start"
+        />
+        <Label 
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Text="Welcome to Xamarin.Forms!" 
+            HorizontalOptions="Center" 
+            VerticalOptions="Center" 
+        />
+        <Label 
+            Grid.Column="1" 
+            Grid.Row="2" 
+            Text="1,2" 
+            VerticalOptions="Center"
+            HorizontalTextAlignment="Center"
+            BackgroundColor="Silver"
+        />
+        <Label 
+            Grid.Column="2" 
+            Grid.Row="3" 
+            Margin="12"
+            Text="2,3" 
+            TextColor="White"
+            FontAttributes="Bold"
+            BackgroundColor="Green"
+            VerticalOptions="End"
+            HorizontalTextAlignment="End"
+        />
+    </views:PreviewGrid>
+</ContentPage>
+```
+
+![]({{site.baseurl}}/_drafts/Screen%20Shot%202019-02-19%20at%2014.29.41.png)
+
+
 
