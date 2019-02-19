@@ -332,7 +332,8 @@ Here is an example of what this looks like in practice:
 </ContentPage>
 ```
 
-![]({{site.baseurl}}/_drafts/Screen%20Shot%202019-02-19%20at%2014.29.41.png)
+![Screen Shot 2019-02-19 at 14.29.41.png]({{site.baseurl}}/_drafts/Screen Shot 2019-02-19 at 14.29.41.png)
+
 
 
 
