@@ -51,10 +51,212 @@ namespace PreviewGridLines.Views
 }
 ```
 
-In your platform-specific projects you'll need a subclass of `ViewRenderer`. Here's one for iOS:
+In your platform-specific projects you'll need a subclass of `ViewRenderer`. The one for iOS looks like this:
 
 ```
-PreviewGridRenderer
+using System.ComponentModel;
+using System.Linq;
+using CoreGraphics;
+using PreviewGridLines.Helpers;
+using PreviewGridLines.iOS.Renderers;
+using PreviewGridLines.Views;
+using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
+
+[assembly: ExportRenderer(typeof(PreviewGrid), typeof(PreviewGridRenderer))]
+
+namespace PreviewGridLines.iOS.Renderers
+{
+    public class PreviewGridRenderer : ViewRenderer<PreviewGrid, UIView>
+    {
+        private bool _isShowingGridLines;
+        private CGColor _gridLinesColor;
+        private CGColor _gridFillColor;
+        private CGColor _paddingFillColor;
+
+        protected override void OnElementChanged(ElementChangedEventArgs<PreviewGrid> e)
+        {
+            base.OnElementChanged(e);
+
+            if (e.NewElement != null)
+            {
+                UpdateBackgroundColor();
+                UpdateShowingGridLines();
+                UpdateGridLinesColor();
+            }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
+            {
+                UpdateBackgroundColor();
+            }
+            if (e.PropertyName == PreviewGrid.IsShowingGridLinesProperty.PropertyName)
+            {
+                UpdateShowingGridLines();
+            }
+            if (e.PropertyName == PreviewGrid.GridLinesColorProperty.PropertyName)
+            {
+                UpdateGridLinesColor();
+            }
+        }
+
+        private void UpdateBackgroundColor()
+        {
+            if (!(Element is PreviewGrid element) || !DesignMode.IsDesignModeEnabled)
+            {
+                return;
+            }
+
+            Layer.BackgroundColor = element.BackgroundColor.ToCGColor();
+        }
+
+        private void UpdateShowingGridLines()
+        {
+            if (!(Element is PreviewGrid element) || !DesignMode.IsDesignModeEnabled)
+            {
+                return;
+            }
+
+            _isShowingGridLines = element.IsShowingGridLines;
+            SetNeedsDisplay();
+        }
+
+        private void UpdateGridLinesColor()
+        {
+            if (!(Element is PreviewGrid element) || !DesignMode.IsDesignModeEnabled)
+            {
+                return;
+            }
+
+            var elementColor = element.GridLinesColor;
+
+            _gridLinesColor = elementColor.ToCGColor();
+            _gridFillColor = elementColor.MultiplyAlpha(0.2f).ToCGColor();
+            _paddingFillColor = elementColor.MultiplyAlpha(0.1f).ToCGColor();
+
+            SetNeedsDisplay();
+        }
+
+        public override void Draw(CGRect rect)
+        {
+            base.Draw(rect);
+
+            if (!(Element is PreviewGrid element) || 
+                !_isShowingGridLines ||
+                !DesignMode.IsDesignModeEnabled)
+            {
+                return;
+            }
+
+            // Reflect on Grid object to get its calculated column widths and row heights
+            var columnDefinitions = element.ColumnDefinitions;
+            var columnWidths = columnDefinitions.Select(
+                d => (double)ReflectionHelper.GetPrivatePropertyValue("ActualWidth", d))
+                .ToList();
+            var rowDefinitions = element.RowDefinitions;
+            var rowHeights = rowDefinitions.Select(
+                d => (double)ReflectionHelper.GetPrivatePropertyValue("ActualHeight", d))
+                .ToList();
+
+            var padding = element.Padding;
+            var columnSpacing = (float)element.ColumnSpacing;
+            var rowSpacing = (float)element.RowSpacing;
+
+            var x = (float)padding.Left;
+            var y = (float)padding.Top;
+            var w = (float)Bounds.Width - (float)padding.Left - (float)padding.Right;
+            var h = (float)Bounds.Height - (float)padding.Top - (float)padding.Bottom;
+
+            using (var g = UIGraphics.GetCurrentContext())
+            {
+                g.SetLineWidth(0.5f);
+
+                // Fill padding area
+                g.SaveState();
+
+                g.SetStrokeColor(_gridLinesColor);
+                g.SetFillColor(_paddingFillColor);
+
+                var paddingPath = new CGPath();
+                paddingPath.AddRect(new CGRect(0f, 0f, Bounds.Width, Bounds.Height));
+                paddingPath.AddRect(new CGRect(x, y, w, h));
+                g.AddPath(paddingPath);
+
+                g.DrawPath(CGPathDrawingMode.EOFillStroke);
+
+                g.RestoreState();
+
+                var gridPath = new CGPath();
+
+                // Draw columns
+                // Fill column spacing & stroke column boundaries
+                var columnX = x;
+                for (var column = 0; column < columnWidths.Count - 1; column++)
+                {
+                    columnX += (float)columnWidths[column];
+
+                    // Fill column spacing
+                    g.SaveState();
+
+                    g.SetStrokeColor(_gridFillColor);
+                    g.SetFillColor(_gridFillColor);
+
+                    var columnSpacingPath = new CGPath();
+                    columnSpacingPath.AddRect(new CGRect(columnX, y, columnSpacing, h));
+                    g.AddPath(columnSpacingPath);
+
+                    g.DrawPath(CGPathDrawingMode.FillStroke);
+
+                    g.RestoreState();
+
+                    // Add column divider line
+                    columnX += (float)columnSpacing / 2f;
+                    gridPath.MoveToPoint(columnX, y);
+                    gridPath.AddLineToPoint(columnX, y + h);
+                    columnX += (float)columnSpacing / 2f;
+                }
+
+                // Draw rows
+                // Fill row spacing & stroke row boundaries
+                var rowY = y;
+                for (var row = 0; row < rowHeights.Count - 1; row++)
+                {
+                    rowY += (float)rowHeights[row];
+
+                    // Fill row spacing
+                    g.SaveState();
+
+                    g.SetStrokeColor(_gridFillColor);
+                    g.SetFillColor(_gridFillColor);
+
+                    var rowSpacingPath = new CGPath();
+                    rowSpacingPath.AddRect(new CGRect(x, rowY, w, rowSpacing));
+                    g.AddPath(rowSpacingPath);
+
+                    g.DrawPath(CGPathDrawingMode.FillStroke);
+
+                    g.RestoreState();
+
+                    // Add row divider line
+                    rowY += (float)rowSpacing / 2f;
+                    gridPath.MoveToPoint(x, rowY);
+                    gridPath.AddLineToPoint(x + w, rowY);
+                    rowY += (float)rowSpacing / 2f;
+                }
+
+                // Draw column & row dividers
+                g.AddPath(gridPath);
+                g.SetStrokeColor(_gridLinesColor);
+                g.DrawPath(CGPathDrawingMode.Stroke);
+            }
+        }
+    }
+}
 ```
 
-I've left out most of the boilerplate code. If you want to see the whole example, it's available on my GitHub page.
+
