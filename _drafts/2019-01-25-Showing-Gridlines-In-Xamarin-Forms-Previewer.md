@@ -344,6 +344,6 @@ Here is the resulting Previewer image:
 ![Previewer.png]({{site.baseurl}}/_drafts/images/Previewer.png)
 
 
-For those wondering, the `ReflectionHelper` object is a static object that is performs reflection on the Xamarin.Forms `Grid`'s `ColumnDefinition` and `RowDefinition` properties called "ActualWidth" and "ActualHeight". I've submitted a GitHub issue to ask for these properties to be surfaced as `public` access, but until that happens we have to take this more risky approach.
+For those wondering, the `ReflectionHelper` object is a static object that performs reflection on the Xamarin.Forms `Grid`'s `ColumnDefinition` and `RowDefinition` properties to find the sub-properties called "ActualWidth" and "ActualHeight" for each one. I've submitted a GitHub issue to ask for these properties to be surfaced as `public` access, but until that happens we have to take this more risky approach.
 
 Now we have a `PreviewGrid` that can show its `Padding` and grid lines on demand. It works the same way as the built-in `Grid`, and shows its grid only when it detects that it is running in the Previewer.
