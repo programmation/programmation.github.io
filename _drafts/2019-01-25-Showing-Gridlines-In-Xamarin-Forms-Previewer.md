@@ -5,15 +5,22 @@ published: false
 
 This blog post describes how to show make a Xamarin.Forms `Grid` show its columns and rows graphically in the Visual Studio XAML Preview.
 
-One of the things about the Previewer that has always frustrated me is that it doesn't show the outlines of any of the objects that I place in a form.
+One of the things about the XAML Previewer that has always frustrated me is that it doesn't show the outlines of any of the objects that I place in a form. It's much easier to visualise what's going on if we can see the objects in a form even when they have no content.
 
-A simple way to visualise the grid is to create some `BoxView` objects, give them `BackgroundColor`, and add them to the `Grid`. However, it's easy to see that this is ugly, prone to errors (I have accidentally shipped something with a hot pink background at least once) and extremely tedious.
+A simple way to visualise the grid is to create some `BoxView` objects, give them `BackgroundColor`, and add them to the `Grid` in any spots where the grid is not obvious. 
 
-Xamarin.Forms objects are cross-platform virtualisations that draw on each platform by means of a Renderer. Delving into the source of Xamarin Forms revealed that the `Grid` object is a subclass of `Layout<View>`, but unusually it has no renderer of its own. This is because all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
+However, it's easy to see that this is ugly and prone to errors. 
+
+- It adds objects to the visual tree that are only needed at design time. 
+- There is a significant risk that these objects will appear in the live app when we don't want them to.
+
+To provide a good solution to these issues we need something that can display the details of a `Grid` at design-time, but is invisible in a live app.
+
+Xamarin.Forms objects are cross-platform virtualisations that draw on each platform by means of a Renderer. Delving into the source of Xamarin.Forms shows that the `Grid` object is a subclass of `Layout<View>`, but unusually it has no renderer of its own. This is because all it does is manage a collection of child views and arrange them grid-fashion in its parent view.
 
 Most Xamarin.Forms objects are open for subclassing. The `Grid` object definitely is, so we can subclass it in our platform-independent code to make a `PreviewGrid`:
 
-```
+```csharp
 using Xamarin.Forms;
 
 namespace PreviewGridLines.Views
@@ -53,7 +60,7 @@ namespace PreviewGridLines.Views
 
 In your platform-specific projects you'll need a subclass of `ViewRenderer`. The one for iOS looks like this:
 
-```
+```csharp
 using System.ComponentModel;
 using System.Linq;
 using CoreGraphics;
@@ -261,7 +268,7 @@ namespace PreviewGridLines.iOS.Renderers
 
 Here is an example of what this looks like in practice:
 
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
@@ -275,7 +282,7 @@ Here is an example of what this looks like in practice:
         Padding="24"
         ColumnSpacing="12"
         RowSpacing="24"
-        VerticalOptions="StartAndExpand" 
+        VerticalOptions="Start" 
         IsShowingGridLines="true"
         GridLinesColor="Teal"
         >
